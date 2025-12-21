@@ -1,18 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Smooth scrolling for navigation links
+    
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            
-            // Temporary fix for header not being queryable sometimes
+
             const header = document.querySelector('header');
             const headerHeight = header ? header.offsetHeight : 0;
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
 
             if (targetElement) {
-                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                const targetPosition =
+                    targetElement.getBoundingClientRect().top +
+                    window.pageYOffset -
+                    headerHeight;
 
                 window.scrollTo({
                     top: targetPosition,
@@ -22,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Add scrolled class to header on scroll
+    
     const header = document.querySelector('header');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
@@ -32,14 +34,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Form submission
-    const form = document.querySelector('#contact form');
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        // In a real application, you would handle the form submission here
-        // For example, using fetch() to send the data to a server
-        alert('Thank you for your message! I will get back to you soon.');
-        form.reset();
+    
+    const skillCards = document.querySelectorAll('.skill-card');
+
+    const skillObserver = new IntersectionObserver(
+        entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show-skill');
+                }
+            });
+        },
+        { threshold: 0.2 }
+    );
+
+    skillCards.forEach(card => {
+        skillObserver.observe(card);
     });
+
+    /* =========================
+       Contact form handling
+    ========================== */
+    const form = document.querySelector('#contact form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your message! I will get back to you soon.');
+            form.reset();
+        });
+    }
 
 });
